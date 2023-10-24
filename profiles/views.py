@@ -45,3 +45,22 @@ def order_history(request, order_number):
     }
 
     return render(request, template, context)
+
+
+@login_required
+def add_to_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    wishlist_item, created = WishlistItem.objects.get_or_create(user=request.user, product=product)
+    return redirect('view_wishlist')
+
+@login_required
+def view_wishlist(request):
+    wishlist_items = WishlistItem.objects.filter(user=request.user)
+    return render(request, 'view_wishlist.html', {'wishlist_items': wishlist_items})
+
+@login_required
+def remove_from_wishlist(request, wishlist_item_id):
+    wishlist_item = get_object_or_404(WishlistItem, id=wishlist_item_id)
+    if wishlist_item.user == request.user:
+        wishlist_item.delete()
+    return redirect('view_wishlist')
