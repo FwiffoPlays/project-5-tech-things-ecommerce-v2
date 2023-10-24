@@ -5,6 +5,7 @@ from django.dispatch import receiver
 
 from django_countries.fields import CountryField
 
+from products.models import Product
 
 class UserProfile(models.Model):
     """
@@ -33,3 +34,14 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.create(user=instance)
     # Existing users: just save the profile
     instance.userprofile.save()
+
+class WishlistItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist_items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # Assuming you have a Product model
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')  # Ensures a user can't add the same product more than once
+
+    def __str__(self):
+        return f"{self.user.username}'s wishlist item: {self.product.name}"
