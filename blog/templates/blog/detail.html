@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ blog.title }}{% endblock %}
+
+{% block content %}
+<div class="container h-100" style="margin-top: 10rem;">
+    <h1 class="text-black">{{ blog.title }}</h1>
+    <p class="text-black">{{ blog.content }}</p>
+    <a href="{% url 'update' blog.id %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'delete' blog.id %}" class="btn btn-danger">Delete</a>    
+</div>
+  
+{% endblock %}

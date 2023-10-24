@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+  <div class="container h-100">
+    <div class="row">
+      <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
+        <h1>All Blog Posts</h1>
+  <nav>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a href="{% url 'blog_index' %}">All Blogs</a>
+      </li>
+      {% if request.user.is_superuser %}
+        <li class="nav-item">
+          <a href="{% url 'create' %}">Add Blog</a>
+        </li>
+      {% endif %}
+    </ul>
+    
+  </nav>
+  <ul class="list-group">
+    {% for blog in blogs %}
+      <li class="list-group-item">
+        <a href="{% url 'detail' blog.id %}">{{ blog.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  </div>
+      </div>
+    </div>
+    
+{% endblock %}

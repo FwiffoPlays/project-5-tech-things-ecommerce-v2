@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Blog{% endblock %}
+
+{% block content %}
+    <div class="container h-100" style="margin-top: 10rem;">
+        <h1 class="logo-font text-black">Create New Blog</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label text-black">Title</label>
+                <input type="text" class="form-control" name="title">
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-black">Content</label>
+                <textarea class="form-control" name="content"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+  
+{% endblock %}
