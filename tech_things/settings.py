@@ -11,26 +11,44 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 
+if os.path.isfile('env.py'):
+    import env
+    print("DEBUG: env.py found")
+    SECRET_KEY = os.environ.get('SECRET_KEY')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+if os.environ.get('DEVELOPMENT') == 'True':
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+    DEBUG = True
+    ALLOWED_HOSTS = ['*']
+    # Use SQLite when in development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+    print("WARNING: App is running in development mode")
+elif os.environ.get('DEVELOPMENT') == 'False':
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    os.environ.get('SECRET_KEY')
+    DEBUG = False
+    ALLOWED_HOSTS = ['ci-project-5-tech-things-v2-121384d9eeb3.herokuapp.com/', 'localhost']
+    # Use ElephantSQL when not in development
+    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
+    print("WARNING: App is running in production mode")
+
+
 
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-39&j3g+vqc9u-4&-b=d@ep237n1l@ip#k35$%^+*e60*5-!in$'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = ['8000-fwiffoplays-project5tec-clnxayg0pjt.ws-eu104.gitpod.io']
 
 # Application definition
 
@@ -124,12 +142,7 @@ WSGI_APPLICATION = 'tech_things.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+
 
 
 # Password validation
@@ -169,7 +182,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+#STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
